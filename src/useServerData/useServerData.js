@@ -23,7 +23,7 @@ const useServerData = ({url, isButtonClick}) => {
               setContactData(res.data)
               setIsLoading(false)
             })
-      }, [])
+      }, [url, isButtonClick])
     
 
     return[{contactData, isLoading, setContactData, setIsLoading }, getData ]

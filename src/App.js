@@ -1,10 +1,8 @@
 import './App.css';
 import React, { useState } from 'react'
-import Table from './Table/table';
-import Loader from './Loader/loader';
-import DetailInfo from './DetailInfo/DetailInfo';
 import useServerData from  './useServerData/useServerData';
 import Switcher from './Switcher/switcher';
+import TableBody from './TableBody/tableBody';
 
 
 
@@ -18,14 +16,14 @@ function App() {
   const [directionSort, setDirectionSort] = useState(true);
   const [rowItem, setRowItem] = useState('');
   const [url, setUrl] = useState('');
-  const [{ contactData, isLoading, setContactData, setIsLoading }, getData ] = useServerData({url, isButtonClick});
+  const [isRowClicked, setIsRowClicked] = useState(false);
+  const [{ contactData, isLoading, setContactData,}, ] = useServerData({url, isButtonClick});
 
   const buttonHandler = (url) =>{
     setUrl(url)
     setIsButtonClick(true)
     console.log(url)
   }
-
 
   const sortData = (field) => {
     console.log(field)
@@ -48,17 +46,28 @@ function App() {
 
   
 const detailRow = (row) =>{
+  setIsRowClicked(true)
   setRowItem(row)
 }
 
   return (
     <div className="container">
-      <Switcher buttonHandler = {buttonHandler} />
-      {isLoading? <Loader /> : <Table contactData = {contactData} 
-      sortData = {sortData}
-      directionSort = {directionSort}
-      detailRow = {detailRow} /> }
-      <DetailInfo detailInfoData = {rowItem}  />{/* окно для вывода информации о выбранной строке */}    
+
+      {
+        !isButtonClick? <Switcher buttonHandler = {buttonHandler}/>
+        :
+        <TableBody 
+        contactData={contactData}
+        sortData={sortData}
+        rowItem={rowItem}
+        detailInfoData={rowItem}
+        directionSort={directionSort}
+        detailRow = {detailRow} 
+        isLoading = {isLoading}
+        isRowClicked = {isRowClicked} />
+
+      }
+      
     </div>
   );
 }

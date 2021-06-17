@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ArrowUp from '../SVG/arrow-up';
 import ArrowDown from '../SVG/arrow-down';
+import DetailInfo from '../DetailInfo/DetailInfo';
 
 // структуризация вместо пропсов 
-const Table = ({ sortData, contactData, directionSort, detailRow }) =>{       
+const Table = ({ sortData, contactData, directionSort, detailRow, detailInfoData, isRowClicked}) =>{       
   
 const [fieldData, setFieldData] = useState('')
 
@@ -23,10 +24,11 @@ const fieldSortData = (field) =>{
 }
 
 
-// table table-borderless === 
+
 
   return (
-    <table className='table'>{/* выравнивает по человечески таблицу (все было в одной куче) */}
+  <div>
+      <table className='table'>{/* выравнивает по человечески таблицу (все было в одной куче) */}
       <thead>
         <tr>
           <th onClick={() => { fieldSortData('id')}}>{/* onClick обработчик события,sortData сортировка */}
@@ -59,9 +61,10 @@ const fieldSortData = (field) =>{
           ))}
       </tbody>
     </table>
+    
+    {isRowClicked?<DetailInfo detailInfoData = {detailInfoData} /> : null} 
 
-
-
+  </div>
   );
 }
 

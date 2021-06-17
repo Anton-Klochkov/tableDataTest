@@ -29,9 +29,8 @@ const DetailInfo = ({detailInfoData}) =>{
 {/* приблема к доступу внутренним свойствам объекта. Необъодимо создать доп. констатны к тем свойствам
 объекта которые не доступны сейчас */}
             <div>
-                <b>address:</b>
                 <div>
-                <b> bstreetAddress:</b> {AddressStreetAddress}
+                <b>streetAddress:</b> {AddressStreetAddress}
                 </div>
                 <div>
                 <b>city:</b> {AddressCity}
