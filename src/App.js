@@ -25,6 +25,8 @@ function App() {
   const [buttonPreviousDisabled, setButtonPreviousDisabled] = useState('page-item');
   const [buttonNextDisabled, setButtonNextDisabled] = useState('page-item');
   const [currentPageActive, setCurrentPageActive] = useState('page-item');
+  const [searchText, setSearchText] = useState('')
+  const [newRow, setNewRow] = useState({})
 
 
   const [{ contactData, isLoading, setContactData, isLoaded },] = useServerData({ url, isButtonClick });
@@ -32,12 +34,28 @@ function App() {
   const buttonHandler = (url) => {
     setUrl(url)
     setIsButtonClick(true)
-    // console.log(url)
   }
+
+  const getFiltredData = () => {
+    if(!searchText){
+      return contactData
+    }
+    return contactData.filter(
+      el=>{
+    return (el['firstName'].toLowerCase().includes(searchText.toLowerCase())
+    || el['lastName'].toLowerCase().includes(searchText.toLowerCase())
+    || el['email'].toLowerCase().includes(searchText.toLowerCase()))
+      }
+    )
+  }
+
+  const filtredData = getFiltredData()
+
+
 
   const lastBlockRow = currentPageNumber * limiteCountPage
   const firstBlockRow = lastBlockRow - limiteCountPage + 1
-  const currentBlorRows = contactData.slice(firstBlockRow, lastBlockRow)
+  const currentBlockRows = filtredData.slice(firstBlockRow, lastBlockRow)
 
   const currentPage = (pg) => {
     setCurrentPageNumber(pg)
@@ -51,19 +69,29 @@ function App() {
       return
     }
 
-    setTotalCountRow(contactData.length)
-    const getTotalCountPage = totalCountRow / limiteCountPage/* кол-во страниц, определяет кол-во строк, деленое на переменную */
+    setTotalCountRow(filtredData.length)
+    const getTotalCountPage = Math.ceil(totalCountRow / limiteCountPage)/* кол-во страниц, определяет кол-во строк, деленое на переменную */
     setTotalCountPage(getTotalCountPage)/* колличество страниц */
 
-  }, [ isLoaded, setTotalCountRow, contactData.length, totalCountRow,])
+  }, [ isLoaded, setTotalCountRow, filtredData.length, totalCountRow])
 
 
   let pages = []
   for (let i = 1; i <= totalCountPage; i++) {
     pages.push(i)
   }
-  //console.log(pages)
+  
+  const onSearchSend = (text)=>{
+    setSearchText(text)
+    //console.log(searchText)
+  }
+  //console.log(searchText)
 
+  const getAddFormData =({id, firstName, lastName, email, phone})=>{
+    setNewRow({id, firstName, lastName, email, phone})
+  }
+  console.log(newRow)
+  currentBlockRows.unshift(newRow)
 
   const sortData = (field) => {
     // console.log(field)
@@ -117,14 +145,16 @@ function App() {
         !isButtonClick ? <Switcher buttonHandler={buttonHandler} />
           :
           <TableBody
-            contactData={currentBlorRows}
+            getAddFormData={getAddFormData}
+            contactData={currentBlockRows}
             sortData={sortData}
             rowItem={rowItem}
             detailInfoData={rowItem}
             directionSort={directionSort}
             detailRow={detailRow}
             isLoading={isLoading}
-            isRowClicked={isRowClicked} />
+            isRowClicked={isRowClicked}
+            onSearchSend = {onSearchSend} />
       }
 
       
@@ -139,6 +169,7 @@ function App() {
           currentPageActive={currentPageActive}
           currentPageNumber={currentPageNumber} />
       }
+      
       
 
     </div>

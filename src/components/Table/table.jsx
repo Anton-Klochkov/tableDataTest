@@ -3,9 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 import ArrowUp from '../SVG/arrow-up';
 import ArrowDown from '../SVG/arrow-down';
 import DetailInfo from '../DetailInfo/DetailInfo';
+import ButtonSearch from '../ButtonSearch/buttonSearch';
 
 // структуризация вместо пропсов 
-const Table = ({ sortData, contactData, directionSort, detailRow, detailInfoData, isRowClicked }) => {
+const Table = ({ sortData, contactData, directionSort, detailRow, detailInfoData, isRowClicked, onSearchSend }) => {
 
   const [fieldData, setFieldData] = useState('')
 
@@ -24,10 +25,13 @@ const Table = ({ sortData, contactData, directionSort, detailRow, detailInfoData
   }
 
 
-
+  
 
   return (
     <div>
+      <div>
+      <ButtonSearch onSearchSend = {onSearchSend} />{/* кнопака поиска */}
+      </div>
       <table className='table'>{/* выравнивает по человечески таблицу (все было в одной куче) */}
         <thead>
           <tr>
